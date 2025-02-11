@@ -39,4 +39,19 @@ export class PaymentService {
       throw new Error(error);
     }
   }
+
+  async updatePay(body: UpdatePaymentDto, id: number): Promise<any> {
+    try {
+      let checkPay = await this.prisma.payments.findFirst({
+        where: { payment_id: id },
+      });
+      if (!checkPay) throw new BadRequestException('Payment không tồn tại');
+      return await this.prisma.payments.update({
+        data: body,
+        where: { payment_id: id },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

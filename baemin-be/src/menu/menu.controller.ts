@@ -32,14 +32,14 @@ export class MenuController {
     type: CreateMenuDto,
     required: false,
   })
-  @Put('/create-menu')
+  @Post('/create-menu')
   async createMenu(
     @Res() res: Response,
     @Body() body: CreateMenuDto,
   ): Promise<Response<MenuDto>> {
     let menu = await this.menuService.createMenu(body);
     return res
-      .status(HttpStatus.OK)
+      .status(HttpStatus.CREATED)
       .json({ message: 'Tạo menu thành công', menu });
   }
 

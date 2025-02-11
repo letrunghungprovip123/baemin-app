@@ -31,13 +31,13 @@ export class OrdersController {
     type: CreateOrderDto,
     required: false,
   })
-  @Put('/create-order')
+  @Post('/create-order')
   async createOrder(
     @Res() res: Response,
     @Body() body: CreateOrderDto,
   ): Promise<Response<OrderDto>> {
     let order = await this.ordersService.createOrder(body);
-    return res.status(HttpStatus.OK).json({ order });
+    return res.status(HttpStatus.CREATED).json({ order });
   }
 
   @ApiParam({
@@ -51,5 +51,17 @@ export class OrdersController {
   ): Promise<Response<any>> {
     await this.ordersService.deleteOrder(+id);
     return res.status(HttpStatus.OK).json({ message: 'Xoá thành công' });
+  }
+
+  @Put('/update-order/:order_id')
+  async updateOrder(
+    @Res() res: Response,
+    @Body() body: UpdateOrderDto,
+    @Param('order_id') id: number,
+  ): Promise<Response<any>> {
+    let order = await this.ordersService.updateOrder(body, +id);
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Cập nhật order thành công',order });
   }
 }

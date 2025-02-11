@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   HttpStatus,
+  Put,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -36,7 +37,7 @@ export class PaymentController {
   ): Promise<Response<PaymentDto>> {
     let payment = await this.paymentService.createPay(body);
     return res
-      .status(HttpStatus.OK)
+      .status(HttpStatus.CREATED)
       .json({ message: 'Tạo thanh toán thành công', payment });
   }
 
@@ -53,5 +54,17 @@ export class PaymentController {
     return res
       .status(HttpStatus.OK)
       .json({ message: 'Xoá payment thành công' });
+  }
+
+  @Put('/update-payment/:pay_id')
+  async updatePay(
+    @Res() res: Response,
+    @Body() body: UpdatePaymentDto,
+    @Param('pay_id') id: number,
+  ): Promise<Response<any>> {
+    let payment = await this.paymentService.updatePay(body, +id);
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'update payment thành công', payment });
   }
 }

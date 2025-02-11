@@ -37,4 +37,18 @@ export class RestaurantService {
       throw new Error(error);
     }
   }
+  async updateRes(body: UpdateRestaurantDto, id: number): Promise<any> {
+    try {
+      let checkRes = await this.prisma.restaurants.findFirst({
+        where: { restaurant_id: id },
+      });
+      if (!checkRes) throw new BadRequestException('Nhà hàng không tồn tại');
+      return await this.prisma.restaurants.update({
+        data: body,
+        where: { restaurant_id: id },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }s
 }

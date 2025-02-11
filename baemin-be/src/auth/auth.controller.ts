@@ -31,7 +31,7 @@ export class AuthController {
   ): Promise<Response<any>> {
     let token = await this.authService.login(body);
     return res
-      .status(HttpStatus.OK)
+      .status(HttpStatus.CREATED)
       .json({ message: 'Đăng nhập thành công', token });
   }
 
@@ -45,7 +45,7 @@ export class AuthController {
   ): Promise<Response<any>> {
     let user = await this.authService.signUp(body);
     return res
-      .status(HttpStatus.OK)
+      .status(HttpStatus.CREATED)
       .json({ message: 'Đăng ký thành công', user });
   }
 }

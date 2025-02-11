@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -31,11 +31,30 @@ export class OrdersService {
 
   async deleteOrder(id: number): Promise<any> {
     try {
+      let checkOrder = await this.prisma.orders.findFirst({
+        where: { order_id: id },
+      });
+      if (!checkOrder) throw new BadRequestException('Order không tồn tại');
       await this.prisma.orders.delete({
         where: { order_id: id },
       });
     } catch (error) {
       throw new Error(error);
+    }
+  }
+
+  async updateOrder(body: UpdateOrderDto, id: number): Promise<any> {
+    try {
+      let checkOrder = await this.prisma.orders.findFirst({
+        where: { order_id: id },
+      });
+      if (!checkOrder) throw new BadRequestException('Order không tồn tại');
+      return await this.prisma.orders.update({
+        data: body,
+        where: { order_id: id },
+      });
+    } catch (error) {
+      throw error;
     }
   }
 }

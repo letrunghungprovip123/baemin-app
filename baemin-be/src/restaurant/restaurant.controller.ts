@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   HttpStatus,
+  Put,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
@@ -35,7 +36,7 @@ export class RestaurantController {
   ): Promise<Response<RestaurantDto>> {
     let restaurant = await this.restaurantService.addRes(body);
     return res
-      .status(HttpStatus.OK)
+      .status(HttpStatus.CREATED)
       .json({ message: 'Thêm nhà hàng thành công', restaurant });
   }
 
@@ -52,5 +53,17 @@ export class RestaurantController {
     return res
       .status(HttpStatus.OK)
       .json({ message: 'Xoá nhà hàng thành công' });
+  }
+
+  @Put('/update-restaurant/:res_id')
+  async updateRes(
+    @Res() res: Response,
+    @Body() body: UpdateRestaurantDto,
+    @Param('res_id') id: number,
+  ): Promise<Response<RestaurantDto>> {
+    let restaurant = await this.restaurantService.updateRes(body, +id);
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Cập nhật nhà hàng thành công', restaurant });
   }
 }
